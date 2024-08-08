@@ -25,6 +25,9 @@ namespace BLL.Servicios
                 var claseDb = await _unidadTrabajo.Clase.ObtenerPrimero(e => e.IdClase == dto.IdClase);
                 if (claseDb == null)
                     throw new TaskCanceledException("La Clase no Existe");
+                claseDb = await _unidadTrabajo.Clase.ObtenerPrimero(e => e.Nombre.ToLower() == dto.Nombre.ToLower());
+                if (claseDb != null)
+                    throw new TaskCanceledException("El nombre de la Clase ya Existe");
 
                 _unidadTrabajo.Clase.Actualizar(dto);
                 await _unidadTrabajo.Guardar();
@@ -38,7 +41,11 @@ namespace BLL.Servicios
 
         public async Task<Clase> Agregar(Clase dto)
         {
-            try { 
+            try {
+                var claseDb = await _unidadTrabajo.Clase.ObtenerPrimero(e => e.Nombre.ToLower() == dto.Nombre.ToLower());
+                if (claseDb != null)
+                    throw new TaskCanceledException("El nombre de la Clase ya Existe");
+
                 await _unidadTrabajo.Clase.Agregar(dto);
                 await _unidadTrabajo.Guardar();
 

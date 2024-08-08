@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Servicios.Interfaces
 {
-    public interface IArticulosService
+    public interface IArticulosServicio
     {
         Task<IEnumerable<ArticuloDTO>> ObtenerTodos();
         Task<ArticuloDTO> Agregar(ArticuloDTO dto);

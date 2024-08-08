@@ -5,6 +5,9 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using BLL.Servicios.Interfaces;
 using BLL.Servicios;
+using Data.Interfaces;
+using Data.Repositorios;
+using Utilidades;
 
 namespace WebCoppel.Extenciones
 {
@@ -60,13 +63,15 @@ namespace WebCoppel.Extenciones
                     return new BadRequestObjectResult(errorResponse);
                 };
             });
-            /*
+
             services.AddScoped<IUnidadTrabajo, UnidadTrabajo>();
             services.AddAutoMapper(typeof(MappingProfile));
 
-            services.AddScoped<IEspecialidadServicio, EspecialidadServicio>();
-            services.AddScoped<IMedicoServicio, MedicoServicio>();
-            */
+            services.AddScoped<IArticulosServicio, ArticuloServicio>();
+            services.AddScoped<IClaseServicio, ClaseServicio>();
+            services.AddScoped<IFamiliaServicio, FamiliaServicio>();
+            services.AddScoped<IDepartamentoServicio, DepartamentoServicio>();
+
             return services;
         }
     }

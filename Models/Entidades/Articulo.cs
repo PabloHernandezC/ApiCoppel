@@ -11,6 +11,8 @@ namespace Models.Entidades
     public class Articulo
     {
         [Key]
+        public int IdArticulo { get; set; }
+
         [Required(ErrorMessage = "EL SKU es Requerido")]
         public int Sku { get; set; }
         [Required(ErrorMessage = "El Nombre del Articulo es Requerido")]

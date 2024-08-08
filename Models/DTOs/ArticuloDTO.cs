@@ -11,6 +11,7 @@ namespace Models.DTOs
 {
     public class ArticuloDTO
     {
+        public int IdArticulo { get; set; }
         public int Sku { get; set; }
         [Required(ErrorMessage = "El Nombre del Articulo es Requerido")]
         [StringLength(15, MinimumLength = 1, ErrorMessage = "El nombre del Articulo debe tener minimo 1 caracter y maximo 15")]

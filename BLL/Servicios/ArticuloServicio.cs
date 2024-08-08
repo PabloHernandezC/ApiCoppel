@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Servicios
 {
-    public class ArticuloServicio : IArticulosService
+    public class ArticuloServicio : IArticulosServicio
     {
         private readonly IUnidadTrabajo _unidadTrabajo;
         private readonly IMapper _mapper;
@@ -53,29 +53,38 @@ namespace BLL.Servicios
 
         public async Task<ArticuloDTO> Agregar(ArticuloDTO dto)
         {
-            Articulo articulo = new Articulo 
+            try
             {
-                Sku = dto.Sku,
-                Article = dto.Article,
-                Marca = dto.Marca,
-                Modelo = dto.Modelo,
-                IdClase = dto.IdClase,  
-                IdDepartamento= dto.IdDepartamento,
-                IdFamilia = dto.IdFamilia,
-                FechaAlta = DateTime.Now,
-                Stock = dto.Stock,
-                Cantidad = dto.Cantidad,
-                Descontinuado = dto.Descontinuado == 1 ? true : false,
-                FechaBaja = new DateTime(1900, 1, 1)
-            };
+                Articulo articulo = new Articulo
+                {
+                    Sku = dto.Sku,
+                    Article = dto.Article,
+                    Marca = dto.Marca,
+                    Modelo = dto.Modelo,
+                    IdClase = dto.IdClase,
+                    IdDepartamento = dto.IdDepartamento,
+                    IdFamilia = dto.IdFamilia,
+                    FechaAlta = DateTime.Now,
+                    Stock = dto.Stock,
+                    Cantidad = dto.Cantidad,
+                    Descontinuado = dto.Descontinuado == 1 ? true : false,
+                    FechaBaja = new DateTime(1900, 1, 1)
+                };
 
-            await _unidadTrabajo.Articulo.Agregar(articulo);
-            await _unidadTrabajo.Guardar();
+                await _unidadTrabajo.Articulo.Agregar(articulo);
+                await _unidadTrabajo.Guardar();
 
-            if(articulo.Sku == 0)
-                throw new TaskCanceledException("El articulo no se pudo Crear");
+                if (articulo.Sku == 0)
+                    throw new TaskCanceledException("El articulo no se pudo Crear");
 
-            return _mapper.Map<ArticuloDTO>(articulo);
+                return _mapper.Map<ArticuloDTO>(articulo);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
 
         public async Task<bool> ExisteSku(int Sku)
@@ -88,7 +97,7 @@ namespace BLL.Servicios
         {
             try
             {
-                var lista = await _unidadTrabajo.Articulo.ObtenerTodos(
+                var lista = await _unidadTrabajo.Articulo.ObtenerTodos(incluirPropiedades: "clase,familia,departamento",
                     orderBy: e => e.OrderBy(e => e.Article));
 
                 return _mapper.Map<IEnumerable<ArticuloDTO>>(lista);
