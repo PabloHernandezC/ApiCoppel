@@ -1,0 +1,6 @@
+@ApiCoppel_HostAddress = http://localhost:5291
+
+GET {{ApiCoppel_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
