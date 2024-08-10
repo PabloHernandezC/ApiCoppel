@@ -13,16 +13,6 @@ namespace Utilidades
     {
         public MappingProfile()
         {
-            /*
-            CreateMap<Articulo, ArticuloDTO>()
-                .ForMember(d => d.Descontinuado, m => m.MapFrom(o => o.Descontinuado == true ? 1 : 0))
-                .ForMember(d => d.NombreClase, m => m.MapFrom(o => o.clase.Nombre))
-                .ForMember(d => d.NombreDepartamento, m => m.MapFrom(o => o.departamento.Nombre))
-                .ForMember(d => d.NombreFamilia, m => m.MapFrom(o => o.familia.Nombre));
-
-            CreateMap<Clase, ClaseDTO>()
-                .ForMember(d => d.NombreDepartamento, m => m.MapFrom(o => o.departamento.Nombre));
-            */
         }
     }
 }

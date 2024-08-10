@@ -24,19 +24,6 @@ namespace Data.Configuraciones
             builder.Property(x => x.Cantidad).IsRequired();
             builder.Property(x => x.Descontinuado).IsRequired();
 
-            /*Relaciones
-            builder.HasOne(x => x.clase).WithMany()
-                .HasForeignKey(x => x.IdClase)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            builder.HasOne(x => x.departamento).WithMany()
-                .HasForeignKey(x => x.IdDepartamento)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            builder.HasOne(x => x.familia).WithMany()
-                .HasForeignKey(x => x.IdFamilia)
-                .OnDelete(DeleteBehavior.NoAction);
-            */
         }
     }
 }
