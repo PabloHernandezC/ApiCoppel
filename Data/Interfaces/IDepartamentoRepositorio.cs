@@ -9,6 +9,11 @@ namespace Data.Interfaces
 {
     public interface IDepartamentoRepositorio : IRepositorioGenerico<Departamento>
     {
-        void Actualizar(Departamento departamento);
+
+        public Task<List<Departamento>> ObtenerLista();
+        public Task<IEnumerable<Departamento>> ObtenerDepartamentoId(int id);
+        public Task<int> AgregarDepartamento(Departamento departamento);
+        public Task<int> ActualizarDepartamento(Departamento departamento);
+        public Task<int> EliminarDepartemento(int idDepartamento);
     }
 }

@@ -18,82 +18,29 @@ namespace BLL.Servicios
             _unidadTrabajo = unidadTrabajo;
         }
 
-        public async Task Actualizar(Departamento dto)
+        public async Task<int> ActualizarDepartamento(Departamento departamento)
         {
-            try
-            {
-                var departamentoDb = await _unidadTrabajo.Departamento.ObtenerPrimero(e => e.IdDepartamento == dto.IdDepartamento);
-                if (departamentoDb == null)
-                    throw new TaskCanceledException("La Departamento no Existe");
-
-                departamentoDb = await _unidadTrabajo.Departamento.ObtenerPrimero(e => e.Nombre.ToLower() == dto.Nombre.ToLower());
-                if (departamentoDb != null)
-                    throw new TaskCanceledException("El nombre del Departamento ya existe");
-
-                _unidadTrabajo.Departamento.Actualizar(dto);
-                await _unidadTrabajo.Guardar();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            return await _unidadTrabajo.Departamento.ActualizarDepartamento(departamento);
         }
 
-        public async Task<Departamento> Agregar(Departamento dto)
+        public async Task<int> AgregarDepartamento(Departamento departamento)
         {
-            try
-            {
-                var departamentoDb = await _unidadTrabajo.Departamento.ObtenerPrimero(e => e.Nombre.ToLower() == dto.Nombre.ToLower());
-                if (departamentoDb != null)
-                    throw new TaskCanceledException("El nombre del Departamento ya existe");
-
-                await _unidadTrabajo.Departamento.Agregar(dto);
-                await _unidadTrabajo.Guardar();
-
-                if (dto.IdDepartamento == 0)
-                    throw new TaskCanceledException("El Departamento no se pudo Crear");
-
-                return dto;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return await _unidadTrabajo.Departamento.AgregarDepartamento(departamento);
         }
 
-        public async Task<IEnumerable<Departamento>> ObtenerTodos()
+        public async Task<int> EliminarDepartemento(int idDepartamento)
         {
-            try
-            {
-                var lista = await _unidadTrabajo.Departamento.ObtenerTodos(
-                    orderBy: e => e.OrderBy(e => e.Nombre));
-
-                return lista;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            return await _unidadTrabajo.Departamento.EliminarDepartemento(idDepartamento);
         }
 
-        public async Task Remover(int id)
+        public async Task<IEnumerable<Departamento>> ObtenerDepartamentoId(int id)
         {
-            try
-            {
-                var departamentoDb = await _unidadTrabajo.Departamento.ObtenerPrimero(e => e.IdDepartamento == id);
-                if (departamentoDb == null)
-                    throw new TaskCanceledException("El Departamento no Existe");
+            return await _unidadTrabajo.Departamento.ObtenerDepartamentoId(id);
+        }
 
-                _unidadTrabajo.Departamento.Remover(departamentoDb);
-                await _unidadTrabajo.Guardar();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+        public async Task<List<Departamento>> ObtenerLista()
+        {
+            return await _unidadTrabajo.Departamento.ObtenerLista();
         }
     }
 }

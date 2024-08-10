@@ -1,5 +1,6 @@
 ﻿using BLL.Servicios.Interfaces;
 using Data.Interfaces;
+using Models.DTOs;
 using Models.Entidades;
 using System;
 using System.Collections.Generic;
@@ -18,81 +19,42 @@ namespace BLL.Servicios
             _unidadTrabajo = unidadTrabajo;
         }
 
-        public async Task Actualizar(Familia dto)
+        public Task<int> ActualizarFamilia(FamiliaDTO dto)
         {
-            try
+            Familia familia = new Familia
             {
-                var familiaDb = await _unidadTrabajo.Familia.ObtenerPrimero(e => e.IdFamilia == dto.IdFamilia);
-                if (familiaDb == null)
-                    throw new TaskCanceledException("La Familia no Existe");
-                familiaDb = await _unidadTrabajo.Familia.ObtenerPrimero(e => e.Nombre.ToLower() == dto.Nombre.ToLower());
-                if (familiaDb != null)
-                    throw new TaskCanceledException("El nombre de la Familia ya Existe");
+                IdFamilia = dto.idFamilia,
+                Nombre = dto.NombreFamilia,
+                IdClase = dto.IdClase
+            };
 
-                _unidadTrabajo.Familia.Actualizar(dto);
-                await _unidadTrabajo.Guardar();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            return _unidadTrabajo.Familia.ActualizarFamilia(familia);
         }
 
-        public async Task<Familia> Agregar(Familia dto)
+        public Task<int> AgregarFamilia(FamiliaDTO dto)
         {
-            try
+            Familia familia = new Familia
             {
-                var familiaDb = await _unidadTrabajo.Familia.ObtenerPrimero(e => e.Nombre.ToLower() == dto.Nombre.ToLower());
-                if (familiaDb != null)
-                    throw new TaskCanceledException("El nombre de la Familia ya Existe");
+                Nombre = dto.NombreFamilia,
+                IdClase = dto.IdClase
+            };
 
-                await _unidadTrabajo.Familia.Agregar(dto);
-                await _unidadTrabajo.Guardar();
-
-                if (dto.IdFamilia == 0)
-                    throw new TaskCanceledException("La Familia no se pudo Crear");
-
-                return dto;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return _unidadTrabajo.Familia.AgregarFamilia(familia);
         }
 
-        public async Task<IEnumerable<Familia>> ObtenerTodos()
+        public Task<int> EliminarFamilia(int idFamilia)
         {
-            try
-            {
-                var lista = await _unidadTrabajo.Familia.ObtenerTodos(
-                    orderBy: e => e.OrderBy(e => e.Nombre));
-
-                return lista;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            return _unidadTrabajo.Familia.EliminarFamilia(idFamilia);
         }
 
-        public async Task Remover(int id)
+        public Task<IEnumerable<FamiliaDTO>> ObtenerFamiliaId(int id)
         {
-            try
-            {
-                var familiaDb = await _unidadTrabajo.Familia.ObtenerPrimero(e => e.IdFamilia == id);
-                if (familiaDb == null)
-                    throw new TaskCanceledException("La Familia no Existe");
+            return _unidadTrabajo.Familia.ObtenerFamiliaId(id);
+        }
 
-                _unidadTrabajo.Familia.Remover(familiaDb);
-                await _unidadTrabajo.Guardar();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+        public Task<List<FamiliaDTO>> ObtenerLista()
+        {
+            return _unidadTrabajo.Familia.ObtenerLista();
         }
     }
 }

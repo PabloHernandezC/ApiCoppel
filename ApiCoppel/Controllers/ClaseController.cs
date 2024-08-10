@@ -1,4 +1,5 @@
-﻿using BLL.Servicios.Interfaces;
+﻿using BLL.Servicios;
+using BLL.Servicios.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs;
@@ -20,12 +21,12 @@ namespace ApiCoppel.Controllers
             _response = new();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        [HttpGet("ObtenerLista")]
+        public async Task<IActionResult> ObtenerLista()
         {
             try
             {
-                _response.Resultado = await _claseServicio.ObtenerTodos();
+                _response.Resultado = await _claseServicio.ObtenerLista();
                 _response.IsExitoso = true;
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Mensaje = mensajeExitoso;
@@ -37,17 +38,23 @@ namespace ApiCoppel.Controllers
                 _response.Mensaje = ex.Message;
                 throw;
             }
+
             return Ok(_response);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Crear(Clase dto)
+        [HttpGet("ObtenerId/{id:int}")]
+        public async Task<IActionResult> ObtenerId(int id)
         {
             try
             {
-                await _claseServicio.Agregar(dto);
+                var respuesta = await _claseServicio.ObtenerClaseId(id);
+                if (respuesta == null)
+                {
+                    return null;
+                }
+                _response.Resultado = respuesta;
                 _response.IsExitoso = true;
-                _response.StatusCode = HttpStatusCode.Created;
+                _response.StatusCode = HttpStatusCode.OK;
                 _response.Mensaje = mensajeExitoso;
             }
             catch (Exception ex)
@@ -57,17 +64,25 @@ namespace ApiCoppel.Controllers
                 _response.Mensaje = ex.Message;
                 throw;
             }
+
             return Ok(_response);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Editar(Clase dto)
+        [HttpPost("Agregar")]
+        public async Task<IActionResult> Agregar(ClaseDTO dto)
         {
+            if (dto == null)
+            {
+                return BadRequest();
+            }
+
             try
             {
-                await _claseServicio.Actualizar(dto);
+                var respuesta = await _claseServicio.AgregarClase(dto);
+
+                _response.Resultado = respuesta;
                 _response.IsExitoso = true;
-                _response.StatusCode = HttpStatusCode.NoContent;
+                _response.StatusCode = HttpStatusCode.OK;
                 _response.Mensaje = mensajeExitoso;
             }
             catch (Exception ex)
@@ -77,15 +92,41 @@ namespace ApiCoppel.Controllers
                 _response.Mensaje = ex.Message;
                 throw;
             }
+
             return Ok(_response);
         }
 
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Eliminar(int id)
+        [HttpPut("Editar")]
+        public async Task<IActionResult> EditarSP(ClaseDTO dto)
         {
             try
             {
-                await _claseServicio.Remover(id);
+                var respuesta = await _claseServicio.ActualizarClase(dto);
+
+                _response.Resultado = respuesta;
+                _response.IsExitoso = true;
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.Mensaje = mensajeExitoso;
+            }
+            catch (Exception ex)
+            {
+                _response.IsExitoso = false;
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.Mensaje = ex.Message;
+                throw;
+            }
+
+            return Ok(_response);
+        }
+
+        [HttpDelete("Eliminar/{id:int}")]
+        public async Task<IActionResult> EliminarSP(int id)
+        {
+            try
+            {
+                var respuesta = await _claseServicio.EliminarClase(id);
+
+                _response.Resultado = respuesta;
                 _response.IsExitoso = true;
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.Mensaje = mensajeExitoso;

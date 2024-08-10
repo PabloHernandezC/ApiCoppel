@@ -18,6 +18,10 @@ namespace Utilidades
                 .ForMember(d => d.NombreClase, m => m.MapFrom(o => o.clase.Nombre))
                 .ForMember(d => d.NombreDepartamento, m => m.MapFrom(o => o.departamento.Nombre))
                 .ForMember(d => d.NombreFamilia, m => m.MapFrom(o => o.familia.Nombre));
+
+            CreateMap<Clase, ClaseDTO>()
+                .ForMember(d => d.NombreDepartamento, m => m.MapFrom(o => o.departamento.Nombre));
+
         }
     }
 }

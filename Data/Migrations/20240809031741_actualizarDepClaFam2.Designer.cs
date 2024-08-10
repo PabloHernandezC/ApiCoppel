@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240809031741_actualizarDepClaFam2")]
+    partial class actualizarDepClaFam2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,20 +103,12 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdClase"));
 
-                    b.Property<int?>("Departamento")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdDepartamento")
-                        .HasColumnType("int");
-
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("IdClase");
-
-                    b.HasIndex("Departamento");
 
                     b.ToTable("Clases");
                 });
@@ -144,20 +139,12 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdFamilia"));
 
-                    b.Property<int?>("Clase")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdClase")
-                        .HasColumnType("int");
-
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("IdFamilia");
-
-                    b.HasIndex("Clase");
 
                     b.ToTable("Familias");
                 });
@@ -209,24 +196,6 @@ namespace Data.Migrations
                     b.Navigation("departamento");
 
                     b.Navigation("familia");
-                });
-
-            modelBuilder.Entity("Models.Entidades.Clase", b =>
-                {
-                    b.HasOne("Models.Entidades.Departamento", "departamento")
-                        .WithMany()
-                        .HasForeignKey("Departamento");
-
-                    b.Navigation("departamento");
-                });
-
-            modelBuilder.Entity("Models.Entidades.Familia", b =>
-                {
-                    b.HasOne("Models.Entidades.Clase", "clase")
-                        .WithMany()
-                        .HasForeignKey("Clase");
-
-                    b.Navigation("clase");
                 });
 #pragma warning restore 612, 618
         }

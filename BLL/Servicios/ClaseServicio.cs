@@ -1,5 +1,7 @@
-﻿using BLL.Servicios.Interfaces;
+﻿using AutoMapper;
+using BLL.Servicios.Interfaces;
 using Data.Interfaces;
+using Models.DTOs;
 using Models.Entidades;
 using System;
 using System.Collections.Generic;
@@ -12,85 +14,50 @@ namespace BLL.Servicios
     public class ClaseServicio : IClaseServicio
     {
         private readonly IUnidadTrabajo _unidadTrabajo;
+        private readonly IMapper _mapper;
 
-        public ClaseServicio(IUnidadTrabajo unidadTrabajo)
+        public ClaseServicio(IUnidadTrabajo unidadTrabajo, IMapper mapper)
         {
             _unidadTrabajo = unidadTrabajo;
+            _mapper = mapper;
         }
 
-        public async Task Actualizar(Clase dto)
+        public Task<int> ActualizarClase(ClaseDTO dto)
         {
-            try
+            Clase clase = new Clase
             {
-                var claseDb = await _unidadTrabajo.Clase.ObtenerPrimero(e => e.IdClase == dto.IdClase);
-                if (claseDb == null)
-                    throw new TaskCanceledException("La Clase no Existe");
-                claseDb = await _unidadTrabajo.Clase.ObtenerPrimero(e => e.Nombre.ToLower() == dto.Nombre.ToLower());
-                if (claseDb != null)
-                    throw new TaskCanceledException("El nombre de la Clase ya Existe");
+                IdClase = dto.IdClase,
+                Nombre = dto.NombreClase,
+                IdDepartamento = dto.IdDepartamento,
+            };
 
-                _unidadTrabajo.Clase.Actualizar(dto);
-                await _unidadTrabajo.Guardar();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            return _unidadTrabajo.Clase.ActualizarClase(clase);
         }
 
-        public async Task<Clase> Agregar(Clase dto)
+        public Task<int> AgregarClase(ClaseDTO dto)
         {
-            try {
-                var claseDb = await _unidadTrabajo.Clase.ObtenerPrimero(e => e.Nombre.ToLower() == dto.Nombre.ToLower());
-                if (claseDb != null)
-                    throw new TaskCanceledException("El nombre de la Clase ya Existe");
+            Clase clase = new Clase
+            {
+                Nombre = dto.NombreClase,
+                IdDepartamento = dto.IdDepartamento,
+            };
 
-                await _unidadTrabajo.Clase.Agregar(dto);
-                await _unidadTrabajo.Guardar();
-
-                if (dto.IdClase == 0) 
-                    throw new TaskCanceledException("La Clase no se pudo Crear");
-
-                return dto;
-            }
-            catch (Exception){ 
-                throw;
-            }
+            return _unidadTrabajo.Clase.AgregarClase(clase);
         }
 
-        public async Task<IEnumerable<Clase>> ObtenerTodos()
+        public Task<int> EliminarClase(int idClase)
         {
-            try
-            {
-                var lista = await _unidadTrabajo.Clase.ObtenerTodos(
-                    orderBy: e => e.OrderBy(e => e.Nombre));
-
-                return lista;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            return _unidadTrabajo.Clase.EliminarClase(idClase);
         }
 
-        public async Task Remover(int id)
+        public Task<IEnumerable<ClaseDTO>> ObtenerClaseId(int id)
         {
-            try
-            {
-                var claseDb = await _unidadTrabajo.Clase.ObtenerPrimero(e => e.IdClase == id);
-                if (claseDb == null)
-                    throw new TaskCanceledException("La Clase no Existe");
+            return _unidadTrabajo.Clase.ObtenerClaseId(id);
+        }
 
-                _unidadTrabajo.Clase.Remover(claseDb);
-                await _unidadTrabajo.Guardar();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+        public Task<List<ClaseDTO>> ObtenerLista()
+        {
+            return _unidadTrabajo.Clase.ObtenerLista();
         }
     }
 }

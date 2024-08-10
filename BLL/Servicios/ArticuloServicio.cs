@@ -22,6 +22,97 @@ namespace BLL.Servicios
             _mapper = mapper;
         }
 
+        public Task<int> Actualizar(ArticuloDTO dto)
+        {
+            Articulo articulo = new Articulo 
+            {
+                Sku = dto.Sku,
+                Article = dto.Article,
+                Marca = dto.Marca,
+                Modelo = dto.Modelo,
+                IdDepartamento = dto.IdDepartamento,
+                IdClase = dto.IdClase,
+                IdFamilia = dto.IdFamilia,
+                FechaAlta = dto.FechaAlta,
+                Stock = dto.Stock,
+                Cantidad = dto.Cantidad,
+                Descontinuado = dto.Descontinuado == 1 ? true : false,
+                FechaBaja = dto.Descontinuado == 1 ? DateTime.Now : new DateTime(1900, 1, 1),
+            };
+
+            return _unidadTrabajo.Articulo.Actualizar(articulo);
+        }
+
+        public Task<int> AgregarArticulo(ArticuloDTO dto)
+        {
+            Articulo articulo = new Articulo
+            {
+                Sku = dto.Sku,
+                Article = dto.Article,
+                Marca = dto.Marca,
+                Modelo = dto.Modelo,
+                IdDepartamento = dto.IdDepartamento,
+                IdClase = dto.IdClase,
+                IdFamilia = dto.IdFamilia,
+                FechaAlta = DateTime.Now,
+                Stock = dto.Stock,
+                Cantidad = dto.Cantidad,
+                Descontinuado = false,
+                FechaBaja = new DateTime(1900, 1, 1),
+            };
+
+            return _unidadTrabajo.Articulo.AgregarArticulo(articulo);
+        }
+
+        public async Task<int> Eliminar(int id)
+        {
+            Task<bool> task = ExisteSku(id);
+
+            // Usa await para obtener el valor booleano de la tarea
+            bool resultado = await task;
+
+            if (!resultado) 
+            {
+                throw new TaskCanceledException("El Articulo no Existe");
+            }
+
+            return await _unidadTrabajo.Articulo.Eliminar(id);
+        }
+
+        public Task<List<ArticuloDTO>> ObtenerLista()
+        {
+            return _unidadTrabajo.Articulo.ObtenerLista();
+        }
+
+        public async Task<IEnumerable<ArticuloDTO>> ObtenerSKU(int id)
+        {
+            var respuesta = await _unidadTrabajo.Articulo.ObtenerSKU(id);
+
+            if (!respuesta.Any())
+            {
+                throw new TaskCanceledException("El Articulo no Existe");
+            }
+
+            return respuesta;
+        }
+
+        public async Task<bool> ExisteSku(int id)
+        {
+            bool existe = false;
+
+            var respuesta = await _unidadTrabajo.Articulo.ObtenerSKU(id);
+
+            if (respuesta.Any())
+            {
+                existe = true;
+            }
+
+            return existe;
+
+        }
+
+
+        /*
         public async Task Actualizar(ArticuloDTO dto)
         {
             try
@@ -125,6 +216,7 @@ namespace BLL.Servicios
 
                 throw;
             }
-        }
+        }*/
+
     }
 }
