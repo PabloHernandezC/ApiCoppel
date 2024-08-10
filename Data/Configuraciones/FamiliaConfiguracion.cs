@@ -17,9 +17,10 @@ namespace Data.Configuraciones
             builder.Property(x => x.Nombre).IsRequired().HasMaxLength(50);
             builder.Property(x => x.IdClase).IsRequired();
 
+            /*
             builder.HasOne(x => x.clase).WithMany()
                 .HasForeignKey(x => x.IdClase)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.NoAction);*/
         }
 
     }

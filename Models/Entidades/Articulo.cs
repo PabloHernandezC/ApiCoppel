@@ -25,14 +25,8 @@ namespace Models.Entidades
         [StringLength(20, MinimumLength = 1, ErrorMessage = "El nombre del Modelo debe tener minimo 1 caracter y maximo 20")]
         public string Modelo { get; set; }
         public int IdDepartamento { get; set; }
-        [ForeignKey("Departamento")]
-        public Departamento departamento { get; set; }
         public int IdClase { get; set; }
-        [ForeignKey("Clase")]
-        public Clase clase { get; set; }
         public int IdFamilia { get; set; }
-        [ForeignKey("Familia")]
-        public Familia familia { get; set; }
         public DateTime FechaAlta { get; set; }
         [Required(ErrorMessage = "EL Stack es Requerido")]
         public int Stock { get; set; }
