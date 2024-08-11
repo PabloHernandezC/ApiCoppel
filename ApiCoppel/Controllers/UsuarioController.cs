@@ -21,7 +21,7 @@ namespace WebCoppel.Controllers
             _tokenServicio = tokenServicio;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
         {
@@ -29,7 +29,7 @@ namespace WebCoppel.Controllers
             return Ok(usuarios);
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Usuario>> GetUsuario(int id)
         {
